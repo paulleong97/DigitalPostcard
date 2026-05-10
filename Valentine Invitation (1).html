@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Valentine?</title>
+
+  <style>
+    body {
+      height: 100vh;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      font-family: "Comic Sans MS", cursive, sans-serif;
+      overflow: hidden;
+    }
+
+    .card {
+      background: white;
+      padding: 40px 60px 60px;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      position: relative;
+      width: 450px;
+      height: auto;
+    }
+
+    h1 {
+      margin-bottom: 30px;
+      color: #ff4d6d;
+    }
+
+    .buttons {
+      display: inline-flex;
+      gap: 20px;
+      position: relative;
+    }
+
+    button {
+      font-size: 18px;
+      padding: 12px 30px;
+      border-radius: 30px;
+      border: none;
+      cursor: pointer;
+    }
+
+    #yesBtn {
+      background-color: #ff4d6d;
+      color: white;
+    }
+
+    #noBtn {
+      background-color: #ccc;
+      color: #333;
+      position: relative; 
+      transition-property: left, top;
+      transition-timing-function: ease-out;
+    }
+
+    #reactionText {
+      margin-top: 20px;
+      font-size: 18px;
+      min-height: 26px;
+      color: #ff6b81;
+    }
+
+    #thankYou {
+      display: none;
+      font-size: 30px;
+      color: #ff4d6d;
+      margin-top: 20px;
+    }
+
+    #itinerary {
+      display: none;
+      margin-top: 20px;
+      text-align: left;
+      font-size: 16px;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    #itinerary b {
+      color: #ff4d6d;
+    }
+
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-4px); }
+      50% { transform: translateX(4px); }
+      75% { transform: translateX(-4px); }
+      100% { transform: translateX(0); }
+    }
+
+    .shake {
+      animation: shake 0.3s;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card" id="card">
+    <h1 id="question">Dear Poh, will you be my Valentine? 💖</h1>
+
+    <div class="buttons">
+      <button id="yesBtn">Yes</button>
+      <button id="noBtn">No</button>
+    </div>
+
+    <div id="reactionText"></div>
+    <div id="thankYou">Thank you bb I knew you wanted to be my Valentines!! ❤️</div>
+
+    <div id="itinerary">
+
+      <p><b>Date:</b> 14 February 2025</p>
+      <p><b>Itinerary:</b></p>
+      <p>10:00 am : Breakfast</p>
+      <p>11:30 am : Shopping Shopping</p>
+      <p>3:00 pm : Tea time for my bb's sweet treat</p>
+      <p>5:00 pm : Check-in hotel</p>
+      <p>6:30 pm : Romantic Dinner at a nice spot</p>
+      <p>9:00 pm : Cuddles and kisses back in hotel, potentially naughty time? 😏</p>
+
+<p><b>Above is my planned itenary for the day. Please let me know if you want to do anything else</b></p>
+    </div>
+  </div>
+
+  <script>
+    const card = document.getElementById("card");
+    const noBtn = document.getElementById("noBtn");
+    const yesBtn = document.getElementById("yesBtn");
+    const thankYou = document.getElementById("thankYou");
+    const reactionText = document.getElementById("reactionText");
+    const question = document.getElementById("question");
+    const itinerary = document.getElementById("itinerary");
+
+    const messages = [
+      "Eh babe, you misclicked? 😂",
+      "Omo what are you doing? 🏃‍♂️💨",
+      "Where are you runninggggg? 😤🔥",
+      "My cutiepie, come back! 😱",
+      "Bubu not so fast! 😜",
+      "Stop moving darling! 😆",
+      "Why so shy huny? 😳",
+      "Ayoo you're speeding me up! 🏃‍♂️",
+      "Almost gotcha you naughty girl! 😏",
+      "Try again! I think you saw wrongly 😎",
+      "Wait baby! Don't go! 😅",
+      "Come back here dear! 🤭",
+      "You're a tricky one sia! 😝",
+      "Haha, my code is too fast! 😆",
+      "Can't catch me, i hacked into the mainframe! 🏃‍♂️💨",
+      "Why are you dodging my love? 😤",
+      "No way! You have other plans? 😱",
+      "Are you scared of Daddy? 😏",
+      "You're fast but i'm Hacker muahaha? 😂"
+    ];
+
+    let hoverCount = 0;
+    let activated = false;
+
+    noBtn.addEventListener("mouseenter", () => {
+      if (!activated) {
+        lockInitialPosition();
+        activated = true;
+      }
+
+      hoverCount++;
+      moveNoButton();
+      showRandomMessage();
+    });
+
+    function lockInitialPosition() {
+      const btnRect = noBtn.getBoundingClientRect();
+      const cardRect = card.getBoundingClientRect();
+
+      noBtn.style.position = "absolute";
+      noBtn.style.left = btnRect.left - cardRect.left + "px";
+      noBtn.style.top = btnRect.top - cardRect.top + "px";
+    }
+
+    function moveNoButton() {
+      const padding = 10;
+      const maxX = card.clientWidth - noBtn.offsetWidth - padding;
+      const maxY = card.clientHeight - noBtn.offsetHeight - padding;
+
+      let x, y;
+      const minDistance = 100; // Minimum distance from current position
+
+      // Keep trying until the new position is far enough from current
+      do {
+        x = Math.random() * maxX;
+        y = Math.random() * maxY;
+      } while (Math.abs(x - parseFloat(noBtn.style.left)) < minDistance &&
+               Math.abs(y - parseFloat(noBtn.style.top)) < minDistance);
+
+      const duration = Math.min((0.3 + hoverCount * 0.15) / 3, 1.2 / 3);
+      noBtn.style.transitionDuration = duration + "s";
+
+      noBtn.style.left = x + "px";
+      noBtn.style.top = y + "px";
+    }
+
+    function showRandomMessage() {
+      const index = Math.floor(Math.random() * messages.length);
+      reactionText.textContent = messages[index];
+
+      reactionText.classList.remove("shake");
+      void reactionText.offsetWidth;
+      reactionText.classList.add("shake");
+    }
+
+    yesBtn.addEventListener("click", () => {
+      question.style.display = "none";
+      document.querySelector(".buttons").style.display = "none";
+      reactionText.style.display = "none";
+      thankYou.style.display = "block";
+      itinerary.style.display = "block"; // Show the itinerary
+    });
+  </script>
+
+</body>
+</html>
