@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine 💖</title>
+
+<style>
+  body {
+    text-align: center;
+    font-family: Arial, sans-serif;
+    background: pink;
+    overflow: hidden;
+  }
+
+  h1 {
+    margin-top: 100px;
+  }
+
+  button {
+    padding: 15px 25px;
+    font-size: 18px;
+    margin: 10px;
+    border: none;
+    border-radius: 10px;
+  }
+
+  #yesBtn {
+    background-color: #ff4d6d;
+    color: white;
+    position: fixed;
+    left: 30%;
+    bottom: 20%;
+    width: 30%;
+  }
+
+  #noBtn {
+    background-color: #999;
+    position: fixed;
+    right: 30%;
+    bottom: 20%;
+    width: 30%;
+  }
+
+  /* Overlay */
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 105, 180, 0.9);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: white;
+    font-size: 30px;
+    z-index: 10;
+  }
+
+  /* Hearts */
+  .heart {
+    position: absolute;
+    color: red;
+    font-size: 20px;
+    animation: float 2s linear forwards;
+  }
+
+  @keyframes float {
+    from {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateY(-200px);
+      opacity: 0;
+    }
+  }
+</style>
+</head>
+
+<body>
+
+<h1>Will you be my Valentine? 💕</h1>
+
+<button id="yesBtn" onclick="handleYes()">Yes 💖</button>
+<button id="noBtn" onclick="moveNoButton()">No 😢</button>
+
+<!-- Audio -->
+<audio id="yesAudio" preload="auto">
+  <source src="../../assets/audio/romantic_bgm.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="noAudio" preload="auto">
+  <source src="../../assets/audio/happy_bgm.mp3" type="audio/mpeg">
+</audio>
+
+<!-- Overlay -->
+<div class="overlay" id="overlay">
+  <div>YAY!!! ❤️</div>
+</div>
+
+<script>
+// Track whether the 'No' tune has been started and what audio is currently active
+let noAudioPlayed = false;
+let currentAudio = null;
+
+function handleYes() {
+  const yesAudio = document.getElementById("yesAudio");
+  const noAudio = document.getElementById("noAudio");
+
+  // If another audio is playing (e.g. noAudio), stop it
+  if (currentAudio && currentAudio !== yesAudio) {
+    try {
+      currentAudio.pause();
+      currentAudio.currentTime = 0;
+    } catch (e) {
+      console.warn('error stopping current audio', e);
+    }
+  }
+
+  // Play yesAudio and set it as current
+  yesAudio.load();
+  yesAudio.currentTime = 0;
+  yesAudio.muted = false;
+  yesAudio.play().then(() => {
+    // played
+  }).catch(err => console.log('audio play failed:', err));
+  currentAudio = yesAudio;
+
+  // Show overlay
+  const overlay = document.getElementById("overlay");
+  overlay.style.display = "flex";
+
+  // Trigger hearts
+  explodeHearts();
+}
+
+function explodeHearts() {
+  const overlay = document.getElementById("overlay");
+
+  for (let i = 0; i < 30; i++) {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerHTML = "❤️";
+
+    heart.style.left = Math.random() * 100 + "%";
+    heart.style.top = Math.random() * 100 + "%";
+
+    overlay.appendChild(heart);
+
+    setTimeout(() => heart.remove(), 2000);
+  }
+}
+
+// Mobile-friendly moving "No" button
+function moveNoButton() {
+  const noBtn = document.getElementById("noBtn");
+
+  const maxX = window.innerWidth - noBtn.offsetWidth;
+  const maxY = window.innerHeight - noBtn.offsetHeight;
+
+  const randomX = Math.random() * maxX;
+  const randomY = Math.random() * maxY;
+
+  noBtn.style.left = randomX + "px";
+  noBtn.style.top = randomY + "px";
+
+  // Play the 'no' audio only once (first click)
+  if (!noAudioPlayed) {
+    const noAudio = document.getElementById("noAudio");
+    noAudio.load();
+    noAudio.currentTime = 0;
+    noAudio.muted = false;
+    noAudio.play().then(() => {
+      // started playing
+    }).catch(err => console.log('audio play failed:', err));
+
+    currentAudio = noAudio;
+    noAudioPlayed = true;
+  }
+}
+</script>
+
+</body>
+</html>
